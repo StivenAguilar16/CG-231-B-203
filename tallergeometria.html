@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Taller de geometrias-Stiven Aguilar </title> 
+        <style>
+            body { margin: 0; }
+        </style>
+    </head>
+    <body>
+        <script type="module">
+            import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+
+            /*
+            Se crea el escenario y la camara
+            */
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            /*
+            Se coloca la direccion de la luz 
+            */ 
+            const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+            scene.add( directionalLight );
+
+            /*
+            Se crea el arreglo para el tamaño que van a tener las figuras
+            */
+            const dim = [[1,1,1], [1.5,1.5,1.5], [1.5,1.5,1.5]];
+            var geometria = [];
+            for (let i=0; i<2; i++) {
+                geometria.push(new THREE.BoxGeometry(dim[i][0], dim[i][1], dim[i][2]));
+            }
+
+            /*
+            color y material de los objetos de la escena
+            */
+            const color = [{color:0xFF0000}, {color:0xF04A26}, {color:0xFDE305}];     
+            const material=[new THREE.MeshMatcapMaterial(color[0]),new THREE.MeshLambertMaterial(color[1]),new THREE.MeshPhongMaterial(color[2])];
+            
+
+            /*
+            Se crea el cubo
+            */
+            const cube =[];
+            for (let i=0; i<3; i++) {
+                cube.push(new THREE.Mesh(geometria[i], material[i]));
+            }
+            /*
+            Se crea la esfera
+            */
+            var sphereGeometry = new THREE.SphereGeometry(3, 9, 9);
+            var sphereMaterial = new THREE.MeshBasicMaterial({
+                color: 0x0045B5,
+                wireframe: true
+});
+            var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(-8, -1, -1);
+            scene.add(sphere);
+            
+            /*
+            Se crea el cono
+            */ 
+
+            var n=0;
+              const geometry = new THREE.ConeGeometry( 2, 4, 10);
+              const cone = new THREE.Mesh( geometry, material );
+              scene.add( cone );
+              cone.rotation.z=90
+              cone.rotation.y=180
+               cone.rotation.x=90
+            /*
+            Creación de un arreglo para añadir los objetos a la escena
+            */
+            for (let i=0; i<3; i++) {
+                scene.add( cube[i] );
+            }
+
+            /*
+            Desplazamiento en el eje X 
+            */
+            cube[1].position.x = 5;
+            cube[2].position.x = -5;
+  
+            /*
+            camara 
+            */
+            camera.position.z = 10;
+
+            /*
+            movimiento de los ejes de los objetos
+            */
+            function animate() {
+                requestAnimationFrame( animate );
+
+                cube[0].rotation.x += 0.01;
+                cube[0].rotation.y += 0.01;
+
+                cube[1].rotation.x += 0.01;
+                cube[1].rotation.y += 0.01;
+
+                cube[2].rotation.x += 0.01;
+                cube[2].rotation.y += 0.01;
+
+                renderer.render( scene, camera);
+            }
+
+            animate();
+        </script>
+    </body>
+</html>
